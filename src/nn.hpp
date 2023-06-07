@@ -1,8 +1,11 @@
 #pragma once
 
-#include <cassert>
+#include <iostream>
 
+#ifndef NNCU_ASSERT
+#include <cassert>
 #define NNCU_ASSERT assert
+#endif // NNCU_ASSERT
 
 namespace nncu {
 
@@ -22,7 +25,7 @@ public:
 		Row(Matrix &matrix, size_t row);
 
 	public:
-		
+
 		float &at(size_t i, size_t j);
 
 		friend class Matrix;
@@ -44,9 +47,15 @@ public:
 	void activate();
 	void shuffleRows();
 
+	void print(std::ostream &sink);
+
 	friend Matrix dot(Matrix &a, Matrix &b);
 };
 
 Matrix dot(Matrix &a, Matrix &b);
+
+class NeuralNetwork {
+
+};
 
 }

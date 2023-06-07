@@ -1,6 +1,7 @@
 #include "nn.hpp"
 
 #include <algorithm>
+#include <iomanip>
 #include <cmath>
 
 namespace nncu {
@@ -114,6 +115,18 @@ void Matrix::shuffleRows() {
 			}
 		}
 	}
+}
+
+void Matrix::print(std::ostream &sink) {
+	sink << std::fixed << std::setprecision(5) << "[" << std::endl;
+	for(size_t i = 0; i < rows; ++i) {
+		sink << "\t";
+		for(size_t j = 0; j < cols; ++j) {
+			sink << at(i, j) << " ";
+		}
+		sink << std::endl;
+	}
+	sink << "]" << std::endl;
 }
 
 }
