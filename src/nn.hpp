@@ -12,6 +12,8 @@
 
 namespace nncu {
 
+class NeuralNetwork;
+
 class Matrix {
 	size_t rows;
 	size_t cols;
@@ -36,6 +38,9 @@ public:
 	void print(std::ostream &sink, const char *name, const char *padding = "");
 
 	friend class NeuralNetwork;
+
+	friend void backpropagate(NeuralNetwork &network, NeuralNetwork &gradient, std::vector<std::vector<float>> &inputs, std::vector<std::vector<float>> &outputs);
+	friend void learn(NeuralNetwork &network, NeuralNetwork &gradient, float rate);
 };
 
 class NeuralNetwork {
@@ -80,6 +85,9 @@ public:
 	Layer output();
 
 	void print(std::ostream &sink, const char *name);
+
+	friend void backpropagate(NeuralNetwork &network, NeuralNetwork &gradient, std::vector<std::vector<float>> &inputs, std::vector<std::vector<float>> &outputs);
+	friend void learn(NeuralNetwork &network, NeuralNetwork &gradient, float rate);
 };
 
 }

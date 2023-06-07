@@ -162,8 +162,68 @@ float NeuralNetwork::cost() {
 	return c / n;
 }
 
-void NeuralNetwork::train() {
+void backpropagate(NeuralNetwork &network, NeuralNetwork &gradient, std::vector<std::vector<float>> &inputs, std::vector<std::vector<float>> &outputs) {
+	size_t n = inputs.size();
+	for(size_t i = 0; i < n; ++i) {
+		for(size_t j = 0; j < n; ++i) {
+			network.activations[0].at(0, j) = inputs[i][j];
+		}
 
+		network.feed(inputs[i]);
+
+		for(size_t j = 0; j <= network.size; ++j) {
+			gradient.activations[i].fill(0);
+		}
+
+		for(size_t j = 0; j < outputs[i].size(); ++j) {
+			gradient.output()[j] = (network.output()[j] - outputs[i][j]) * 2 / n;
+		}
+
+		for(size_t l = network.size; l > 0; --l) {
+			for(size_t j = 0; j < network.activations[l].cols; ++j) {
+				float a = network.activations[l].at(0, j);
+				float da = gradient.activations[l].at(0, j);
+
+				gradient.biasses[l - 1].at(0, j) += da * a * (1 - a);
+
+				for(size_t k = 0; k < network.activations[l - 1].cols; ++k) {
+					float pa = network.activations[l - 1].at(0, k);
+					float w = network.weights[l - 1].at(k, j);
+
+					gradient.weights[l - 1].at(k, j) += da * a * (1 - a) * pa;
+					gradient.activations[l - 1].at(0, k) += da * a * (1 - a) * w;
+				}
+			}
+		}
+	}
+}
+
+void learn(NeuralNetwork &network, NeuralNetwork &gradient, float rate) {
+	for(size_t i = 0; i < network.size; ++i) {
+		for(size_t j = 0; j < network.weights[i].rows; ++j) {
+			for(size_t k = 0; j < network.weights[i].cols; ++k) {
+				network.weights[i].at(j, k) -= rate * gradient.weights[i].at(j, k);
+			}
+		}
+
+		for(size_t j = 0; j < network.biasses[i].rows; ++j) {
+			for(size_t k = 0; j < network.biasses[i].cols; ++k) {
+				network.biasses[i].at(j, k) -= rate * gradient.biasses[i].at(j, k);
+			}
+		}
+	}
+}
+
+void NeuralNetwork::train() {
+	static NeuralNetwork gradient(architecture);
+	static float rate = 0.2f;
+	
+	for(auto &mat : gradient.weights) mat.fill(0);
+	for(auto &mat : gradient.biasses) mat.fill(0);
+	for(auto &mat : gradient.activations) mat.fill(0);
+
+	backpropagate(*this, gradient, trainingInput, trainingOutput);
+	learn(*this, gradient, rate);
 }
 
 void NeuralNetwork::feed(std::vector<float> input) {
