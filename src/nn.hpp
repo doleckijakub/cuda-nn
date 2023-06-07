@@ -42,7 +42,7 @@ public:
 	Row row(size_t row);
 
 	Matrix copy();
-	Matrix operator+(Matrix &);
+	void operator+=(Matrix &);
 
 	void activate();
 	void shuffleRows();

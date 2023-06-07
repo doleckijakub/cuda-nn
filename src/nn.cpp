@@ -88,14 +88,15 @@ Matrix dot(Matrix &a, Matrix &b) {
 	return dst;
 }
 
-Matrix Matrix::operator+(Matrix &other) {
-	Matrix dst(rows, cols);
+void Matrix::operator+=(Matrix &other) {
+	NNCU_ASSERT(rows == other.rows);
+	NNCU_ASSERT(cols == other.cols);
+
 	for(size_t i = 0; i < rows; ++i) {
 		for(size_t j = 0; j < cols; ++j) {
-			dst.at(i, j) = other.at(i, j) + at(i, j);
+			at(i, j) += other.at(i, j);
 		}
 	}
-	return dst;
 }
 
 void Matrix::activate() {
