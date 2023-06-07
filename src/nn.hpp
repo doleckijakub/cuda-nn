@@ -1,35 +1,23 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 
 #ifndef NNCU_ASSERT
 #include <cassert>
 #define NNCU_ASSERT assert
 #endif // NNCU_ASSERT
 
+#define NNCU_PRINT(obj) (obj).print(std::cout, #obj)
+
 namespace nncu {
 
 class Matrix {
 	size_t rows;
 	size_t cols;
-	size_t stride;
 	float *elements;
 
 public:
-
-	class Row {
-		size_t cols;
-		size_t stride;
-		float *elements;
-
-		Row(Matrix &matrix, size_t row);
-
-	public:
-
-		float &at(size_t i, size_t j);
-
-		friend class Matrix;
-	};
 
 	Matrix(size_t rows, size_t cols);
 	~Matrix();
@@ -39,23 +27,59 @@ public:
 	void fill(float x);
 	void randomize(float low, float high);
 
-	Row row(size_t row);
-
-	Matrix copy();
 	void operator+=(Matrix &);
+	void dot(Matrix &a, Matrix &b);
 
 	void activate();
 	void shuffleRows();
 
-	void print(std::ostream &sink);
+	void print(std::ostream &sink, const char *name, const char *padding = "");
 
-	friend Matrix dot(Matrix &a, Matrix &b);
+	friend class NeuralNetwork;
 };
 
-Matrix dot(Matrix &a, Matrix &b);
-
 class NeuralNetwork {
+	const std::vector<size_t> architecture;
+	size_t size;
 
+	std::vector<Matrix> weights;
+	std::vector<Matrix> biasses;
+	std::vector<Matrix> activations;
+
+	size_t inputSize();
+	size_t outputSize();
+
+	std::vector<std::vector<float>> trainingInput;
+	std::vector<std::vector<float>> trainingOutput;
+
+public:
+
+	class Layer {
+		size_t size;
+		float *data;
+
+		Layer(size_t size, float *data);
+
+	public:
+
+		float &operator[](size_t index);
+
+		friend class NeuralNetwork;
+	};
+
+	NeuralNetwork(std::vector<size_t> architecture);
+
+	void remember(std::vector<float> input, std::vector<float> output);
+
+	float cost();
+
+	void train();
+
+	void feed(std::vector<float> input);
+
+	Layer output();
+
+	void print(std::ostream &sink, const char *name);
 };
 
 }
