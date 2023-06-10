@@ -165,14 +165,14 @@ float NeuralNetwork::cost() {
 void backpropagate(NeuralNetwork &network, NeuralNetwork &gradient, std::vector<std::vector<float>> &inputs, std::vector<std::vector<float>> &outputs) {
 	size_t n = inputs.size();
 	for(size_t i = 0; i < n; ++i) {
-		for(size_t j = 0; j < n; ++i) {
+		for(size_t j = 0; j < network.activations[0].cols; ++j) {
 			network.activations[0].at(0, j) = inputs[i][j];
 		}
 
 		network.feed(inputs[i]);
 
 		for(size_t j = 0; j <= network.size; ++j) {
-			gradient.activations[i].fill(0);
+			gradient.activations[j].fill(0);
 		}
 
 		for(size_t j = 0; j < outputs[i].size(); ++j) {
@@ -187,6 +187,7 @@ void backpropagate(NeuralNetwork &network, NeuralNetwork &gradient, std::vector<
 				gradient.biasses[l - 1].at(0, j) += da * a * (1 - a);
 
 				for(size_t k = 0; k < network.activations[l - 1].cols; ++k) {
+
 					float pa = network.activations[l - 1].at(0, k);
 					float w = network.weights[l - 1].at(k, j);
 
@@ -201,13 +202,13 @@ void backpropagate(NeuralNetwork &network, NeuralNetwork &gradient, std::vector<
 void learn(NeuralNetwork &network, NeuralNetwork &gradient, float rate) {
 	for(size_t i = 0; i < network.size; ++i) {
 		for(size_t j = 0; j < network.weights[i].rows; ++j) {
-			for(size_t k = 0; j < network.weights[i].cols; ++k) {
+			for(size_t k = 0; k < network.weights[i].cols; ++k) {
 				network.weights[i].at(j, k) -= rate * gradient.weights[i].at(j, k);
 			}
 		}
 
 		for(size_t j = 0; j < network.biasses[i].rows; ++j) {
-			for(size_t k = 0; j < network.biasses[i].cols; ++k) {
+			for(size_t k = 0; k < network.biasses[i].cols; ++k) {
 				network.biasses[i].at(j, k) -= rate * gradient.biasses[i].at(j, k);
 			}
 		}

@@ -9,7 +9,7 @@ int main() {
 	nn.remember({ 1, 0 }, { 1 });
 	nn.remember({ 1, 1 }, { 0 });
 
-	for(size_t i = 0; i < 1000; ++i) {
+	for(size_t i = 0; i < 20 * 1000; ++i) {
 		nn.train();
 		std::cout << i << ": cost = " << nn.cost() << std::endl;
 	}
