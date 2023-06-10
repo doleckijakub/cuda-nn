@@ -1,6 +1,6 @@
 # CUDA nn
 
-[![CI](https://github.com/doleckijakub/cuda-nn/actions/workflows/build.yml/badge.svg)](https://github.com/doleckijakub/cuda-nn/actions/workflows/build.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENCE) [![c++17](https://img.shields.io/badge/C++-17-blue.svg?style=flat&logo=c++)](https://en.cppreference.com/w/cpp/17)
+[![CI](https://github.com/doleckijakub/cuda-nn/actions/workflows/build.yml/badge.svg)](https://github.com/doleckijakub/cuda-nn/actions/workflows/build.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![c++17](https://img.shields.io/badge/C++-17-blue.svg?style=flat&logo=c++)](https://en.cppreference.com/w/cpp/17)
 
 ## Usage
 
